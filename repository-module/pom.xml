@@ -10,6 +10,7 @@
     <groupId>ru.mail.dimaushenko</groupId>
     <artifactId>repository-module</artifactId>
     <version>1.0-SNAPSHOT</version>
+    
     <name>repository-module</name>
 
     <properties>
