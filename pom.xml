@@ -25,6 +25,7 @@
     <properties>
         <service-module.version>1.0-SNAPSHOT</service-module.version>
         <repository-module.version>1.0-SNAPSHOT</repository-module.version>
+        <javax.web-module.version>7.0</javax.web-module.version>
     </properties>
     
     <dependencies>
