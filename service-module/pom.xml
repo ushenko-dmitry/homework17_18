@@ -25,6 +25,12 @@
             <artifactId>repository-module</artifactId>
             <version>${repository-module.version}</version>
         </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>${javax.web-module.version}</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
 </project>

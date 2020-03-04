@@ -1,8 +1,12 @@
 package ru.mail.dimaushenko.service.model;
 
+import javax.validation.constraints.Size;
+
 public class AddDocumentDTO {
 
     private String uniqueNumber;
+    
+    @Size (max = 100, message = "is required")
     private String description;
 
     public String getUniqueNumber() {
