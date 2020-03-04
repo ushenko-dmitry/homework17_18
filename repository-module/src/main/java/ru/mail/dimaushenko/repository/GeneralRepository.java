@@ -10,6 +10,8 @@ public interface GeneralRepository<T> {
 
     List<T> getAllEntities(Connection connection) throws SQLException;
 
+    Integer getAmountEntities(Connection connection) throws SQLException;
+
     void updateEntity(Connection connection, T t) throws SQLException;
 
     void removeEntity(Connection connection, T t) throws SQLException;

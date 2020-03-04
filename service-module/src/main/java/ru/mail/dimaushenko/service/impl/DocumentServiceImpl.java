@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -56,7 +55,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<DocumentDTO> getAllDocument() {
+    public List<DocumentDTO> getAllDocuments() {
         try (Connection connection = connectionPoolRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
@@ -75,14 +74,51 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public List<DocumentDTO> getPackDocuments(Integer currentPage, Integer documentsPerPage) {
+        try (Connection connection = connectionPoolRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                List<Document> documents = documentRepository.getDocuments(connection, currentPage, documentsPerPage);
+                List<DocumentDTO> documentsDTO = documentConvertService.getDTOFromObject(documents);
+                connection.commit();
+                return documentsDTO;
+            } catch (SQLException ex) {
+                connection.rollback();
+                logger.error(ex.getMessage(), ex);
+            }
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
     public DocumentDTO getDocumentById(Long documentId) {
         try (Connection connection = connectionPoolRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                Document document = documentRepository.getElementById(connection, documentId);
+                Document document = documentRepository.getDocumentById(connection, documentId);
                 DocumentDTO documentDTO = documentConvertService.getDTOFromObject(document);
                 connection.commit();
                 return documentDTO;
+            } catch (SQLException ex) {
+                connection.rollback();
+                logger.error(ex.getMessage(), ex);
+            }
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
+    }
+
+    @Override
+    public Integer getAmountDocuments() {
+        try (Connection connection = connectionPoolRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                Integer amountDocuments = documentRepository.getAmountEntities(connection);
+                connection.commit();
+                return amountDocuments;
             } catch (SQLException ex) {
                 connection.rollback();
                 logger.error(ex.getMessage(), ex);

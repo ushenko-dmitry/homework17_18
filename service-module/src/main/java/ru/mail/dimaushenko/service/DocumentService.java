@@ -8,9 +8,13 @@ public interface DocumentService {
 
     DocumentDTO addDocument(AddDocumentDTO addDocumentDTO);
 
-    List<DocumentDTO> getAllDocument();
+    List<DocumentDTO> getAllDocuments();
+    
+    List<DocumentDTO> getPackDocuments(Integer currentPage, Integer documentsPerPage);
 
     DocumentDTO getDocumentById(Long documentId);
+    
+    Integer getAmountDocuments();
 
     boolean updateDocument(DocumentDTO documentDTO);
 

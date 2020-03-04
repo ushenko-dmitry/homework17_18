@@ -14,9 +14,9 @@ import ru.mail.dimaushenko.repository.properties.RequestProperties;
 @Repository
 public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> implements DocumentRepository {
 
-    private static final String id = "id";
-    private static final String uniqueNumber = "unique_number";
-    private static final String description = "description";
+    private static final String COLUMN_ID = "id";
+    private static final String COLUMN_UNIQUE_NUMBER = "unique_number";
+    private static final String COLUMN_DESCRIPTION = "description";
 
     private final RequestProperties requestProperties;
 
@@ -62,7 +62,24 @@ public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> impl
     }
 
     @Override
-    public Document getElementById(Connection connection, Long id) throws SQLException {
+    public List<Document> getDocuments(Connection connection, Integer currentPage, Integer documentsPerPage) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareCall(requestProperties.getSqlRequestSelectPackDocuments())) {
+            Integer startDocument = currentPage * documentsPerPage - documentsPerPage;
+            preparedStatement.setInt(1, startDocument);
+            preparedStatement.setInt(2, documentsPerPage);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<Document> documents = new ArrayList<>();
+                while (resultSet.next()) {
+                    Document document = getDocument(resultSet);
+                    documents.add(document);
+                }
+                return documents;
+            }
+        }
+    }
+
+    @Override
+    public Document getDocumentById(Connection connection, Long id) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareCall(requestProperties.getSqlRequestSelectDocumentById())) {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -71,6 +88,19 @@ public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> impl
                     document = getDocument(resultSet);
                 }
                 return document;
+            }
+        }
+    }
+
+    @Override
+    public Integer getAmountEntities(Connection connection) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareCall(requestProperties.getSqlRequestGetAmountDocuments())) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                Integer amountDocuments = null;
+                if (resultSet.next()) {
+                    amountDocuments = resultSet.getInt(1);
+                }
+                return amountDocuments;
             }
         }
     }
@@ -101,9 +131,10 @@ public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> impl
 
     private Document getDocument(final ResultSet resultSet) throws SQLException {
         Document document = new Document();
-        document.setId((long) resultSet.getInt(id));
-        document.setUniqueNumber(resultSet.getString(uniqueNumber));
-        document.setDescription(resultSet.getString(description));
+        document.setId((long) resultSet.getInt(COLUMN_ID));
+        document.setUniqueNumber(resultSet.getString(COLUMN_UNIQUE_NUMBER));
+        document.setDescription(resultSet.getString(COLUMN_DESCRIPTION));
         return document;
     }
+
 }
