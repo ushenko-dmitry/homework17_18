@@ -10,13 +10,12 @@ import org.springframework.stereotype.Repository;
 import ru.mail.dimaushenko.repository.DocumentRepository;
 import ru.mail.dimaushenko.repository.model.Document;
 import ru.mail.dimaushenko.repository.properties.RequestProperties;
+import static ru.mail.dimaushenko.repository.constants.SQLColumnName.COLUMN_DOCUMENT_ID;
+import static ru.mail.dimaushenko.repository.constants.SQLColumnName.COLUMN_DOCUMENT_UNIQUE_NUMBER;
+import static ru.mail.dimaushenko.repository.constants.SQLColumnName.COLUMN_DOCUMENT_DESCRIPTION;
 
 @Repository
 public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> implements DocumentRepository {
-
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_UNIQUE_NUMBER = "unique_number";
-    private static final String COLUMN_DESCRIPTION = "description";
 
     private final RequestProperties requestProperties;
 
@@ -131,9 +130,9 @@ public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> impl
 
     private Document getDocument(final ResultSet resultSet) throws SQLException {
         Document document = new Document();
-        document.setId((long) resultSet.getInt(COLUMN_ID));
-        document.setUniqueNumber(resultSet.getString(COLUMN_UNIQUE_NUMBER));
-        document.setDescription(resultSet.getString(COLUMN_DESCRIPTION));
+        document.setId((long) resultSet.getInt(COLUMN_DOCUMENT_ID));
+        document.setUniqueNumber(resultSet.getString(COLUMN_DOCUMENT_UNIQUE_NUMBER));
+        document.setName(resultSet.getString(COLUMN_DOCUMENT_NAME));
         return document;
     }
 
