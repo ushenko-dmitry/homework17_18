@@ -1,11 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>View document</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     </head>
     <body>
-        <div>View document by id</div>
+        <h1 class="header">View document</h1>
+        <div th:object="${document}">
+            <h1 th:text="*{name}">Name Document</h1>
+            <p th:text="*{description}">Document Description</p>
+        </div>
+        <div>
+            <form method="POST" action="/document/edit">
+                <input type="hidden" name="id" th:value="${document.id}"/>
+                <input type="submit" value="Edit"/>
+            </form>
+            <form method="POST" action="/document/delete">
+                <input type="hidden" name="id" th:value="${document.id}"/>
+                <input type="submit" value="Delete"/>
+            </form>
+            <a th:href="@{/}">Back</a>
+        </div>
+
     </body>
 </html>

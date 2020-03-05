@@ -1,11 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Edit document</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     </head>
     <body>
-        <div>You can update Document</div>
+        <h1>Edit document</h1>
+        <form method="POST" action="/document/edit" th:object="${document}">
+            <span>Name: </span>
+            <br/>
+            <input type="text" name="name" placeholder="Name" required th:field="*{name}" th:value="*{name}" />
+            <th:block th:if="${#fields.hasErrors('name')}">
+                <br/>
+                <span th:errors="*{name}">name error</span>
+            </th:block>
+            <br/>
+            <br/>
+            <span>Description: </span>
+            <br/>
+            <textarea name="description" placeholder="Description" maxlength="100" th:field="*{description}" th:value="*{description}" ></textarea>
+            <th:block th:if="${#fields.hasErrors('description')}">
+                <br/>
+                <span th:errors="*{description}">description error</span>
+            </th:block>
+            <br/>
+            <br/>
+            <input type="hidden" name="id" value="${id}"/>
+            <input type="submit" name="update" value="Save"/>
+            <a th:href="@{/}">Back</a>
+        </form>
     </body>
 </html>

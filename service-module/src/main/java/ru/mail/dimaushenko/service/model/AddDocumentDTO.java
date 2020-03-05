@@ -9,6 +9,7 @@ public class AddDocumentDTO {
     @NotNull
     @Size(min=1)
     private String name;
+    @NotNull
     @Size(max = 100, message = "is required")
     private String description;
 

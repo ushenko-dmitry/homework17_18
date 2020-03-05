@@ -1,14 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create new document</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     </head>
     <body>
-        <div>Add document</div>
-        <form method="POST" action="add_document">
+        <h1>Create new document</h1>
+        <form method="POST" action="/document/add" th:object="${document}">
+            <span>Name: </span>
+            <br/>
+            <input type="text" name="name" placeholder="Name" required th:field="*{name}" />
+            <th:block th:if="${#fields.hasErrors('name')}">
+                <br/>
+                <span th:errors="*{name}">name error</span>
+            </th:block>
+            <br/>
+            <br/>
+            <span>Description: </span>
+            <br/>
+            <textarea name="description" placeholder="Description" maxlength="100" th:field="*{description}" ></textarea>
+            <th:block th:if="${#fields.hasErrors('description')}">
+                <br/>
+                <span th:errors="*{description}">description error</span>
+            </th:block>
+            <br/>
+            <br/>
             <input type="submit" value="Add"/>
+            <a th:href="@{/}">Back</a>
         </form>
     </body>
 </html>
