@@ -11,6 +11,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="unique_number" type="varchar(255)"/>
+            <column name="name" type="varchar(40)">
+                <constraints nullable="false"/>
+            </column>
             <column name="description" type="varchar(100)"/>
         </createTable>
     </changeSet>

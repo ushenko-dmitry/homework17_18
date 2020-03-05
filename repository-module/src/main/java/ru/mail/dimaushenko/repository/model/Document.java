@@ -4,6 +4,7 @@ public class Document {
 
     private Long id;
     private String uniqueNumber;
+    private String name;
     private String description;
 
     public Long getId() {
@@ -20,6 +21,14 @@ public class Document {
 
     public void setUniqueNumber(String uniqueNumber) {
         this.uniqueNumber = uniqueNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

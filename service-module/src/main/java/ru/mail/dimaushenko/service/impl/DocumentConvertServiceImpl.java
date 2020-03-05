@@ -16,6 +16,7 @@ public class DocumentConvertServiceImpl implements DocumentConvertService {
         DocumentDTO documentDTO = new DocumentDTO();
         documentDTO.setId(document.getId());
         documentDTO.setUniqueNumber(document.getUniqueNumber());
+        documentDTO.setName(document.getName());
         documentDTO.setDescription(document.getDescription());
         return documentDTO;
     }
@@ -35,6 +36,7 @@ public class DocumentConvertServiceImpl implements DocumentConvertService {
         Document document = new Document();
         document.setId(documentDTO.getId());
         document.setUniqueNumber(documentDTO.getUniqueNumber());
+        document.setName(documentDTO.getName());
         document.setDescription(documentDTO.getDescription());
         return document;
     }
@@ -53,6 +55,7 @@ public class DocumentConvertServiceImpl implements DocumentConvertService {
     public Document getObjectFromAddDTO(AddDocumentDTO addDocumentDTO) {
         Document document = new Document();
         document.setUniqueNumber(addDocumentDTO.getUniqueNumber());
+        document.setName(addDocumentDTO.getName());
         document.setDescription(addDocumentDTO.getDescription());
         return document;
     }

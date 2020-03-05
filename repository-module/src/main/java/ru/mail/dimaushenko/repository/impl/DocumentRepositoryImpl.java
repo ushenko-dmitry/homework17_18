@@ -13,6 +13,7 @@ import ru.mail.dimaushenko.repository.properties.RequestProperties;
 import static ru.mail.dimaushenko.repository.constants.SQLColumnName.COLUMN_DOCUMENT_ID;
 import static ru.mail.dimaushenko.repository.constants.SQLColumnName.COLUMN_DOCUMENT_UNIQUE_NUMBER;
 import static ru.mail.dimaushenko.repository.constants.SQLColumnName.COLUMN_DOCUMENT_DESCRIPTION;
+import static ru.mail.dimaushenko.repository.constants.SQLColumnName.COLUMN_DOCUMENT_NAME;
 
 @Repository
 public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> implements DocumentRepository {
@@ -29,7 +30,8 @@ public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> impl
     public Document addEntity(Connection connection, Document document) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareCall(requestProperties.getSqlRequestInsertDocument())) {
             preparedStatement.setString(1, document.getUniqueNumber());
-            preparedStatement.setString(2, document.getDescription());
+            preparedStatement.setString(2, document.getName());
+            preparedStatement.setString(3, document.getDescription());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
@@ -107,7 +109,7 @@ public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> impl
     @Override
     public void updateEntity(Connection connection, Document document) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareCall(requestProperties.getSqlRequestUpdateDocument())) {
-            preparedStatement.setString(1, document.getUniqueNumber());
+            preparedStatement.setString(1, document.getName());
             preparedStatement.setString(2, document.getDescription());
             preparedStatement.setLong(3, document.getId());
             int affectedRows = preparedStatement.executeUpdate();
@@ -133,6 +135,7 @@ public class DocumentRepositoryImpl extends GeneralRepositoryImpl<Document> impl
         document.setId((long) resultSet.getInt(COLUMN_DOCUMENT_ID));
         document.setUniqueNumber(resultSet.getString(COLUMN_DOCUMENT_UNIQUE_NUMBER));
         document.setName(resultSet.getString(COLUMN_DOCUMENT_NAME));
+        document.setDescription(resultSet.getString(COLUMN_DOCUMENT_DESCRIPTION));
         return document;
     }
 

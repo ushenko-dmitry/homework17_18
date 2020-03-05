@@ -1,9 +1,15 @@
 package ru.mail.dimaushenko.service.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class DocumentDTO {
 
     private Long id;
     private String uniqueNumber;
+    @NotNull
+    private String name;
+    @Size (max = 100)
     private String description;
 
     public Long getId() {
@@ -20,6 +26,14 @@ public class DocumentDTO {
 
     public void setUniqueNumber(String uniqueNumber) {
         this.uniqueNumber = uniqueNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
