@@ -12,24 +12,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.mail.dimaushenko.repository.model.Document;
 import ru.mail.dimaushenko.service.DocumentService;
 import ru.mail.dimaushenko.service.model.AddDocumentDTO;
 import ru.mail.dimaushenko.service.model.DocumentDTO;
 import ru.mail.dimaushenko.webmodule.controller.DocumentController;
+import static ru.mail.dimaushenko.webmodule.controller.constants.RequestParemeter.REQUEST_PARAMETER_CURRENT_PAGE;
+import static ru.mail.dimaushenko.webmodule.controller.constants.RequestParemeter.REQUEST_PARAMETER_DOCUMENTS_PER_PAGE;
+import static ru.mail.dimaushenko.webmodule.controller.constants.URL.URL_ADD_DOCUMENT;
+import static ru.mail.dimaushenko.webmodule.controller.constants.ViewPages.VIEW_PAGE_ADD_DOCUMENT;
+import static ru.mail.dimaushenko.webmodule.controller.constants.ViewPages.VIEW_PAGE_UPDATE_DOCUMENT;
 
 @Controller
 public class DocumentControllerImpl implements DocumentController {
 
     private static final Logger logger = LogManager.getLogger(MethodHandles.lookup().lookupClass());
-    
-    private static final String DEFAULT_CURRENT_PAGE = "1";
-    private static final String DEFAULT_DOCUMENTS_PER_PAGE = "5";
-    
-    private static final String REQUEST_PARAMETER_CURRENT_PAGE = "currentPage";
-    private static final String REQUEST_PARAMETER_DOCUMENTS_PER_PAGE = "documentsPerPage";
-    private static final String REQUEST_PARAMETER_DOCUMENTS = "documents";
-    
+
     private final DocumentService documentService;
 
     public DocumentControllerImpl(DocumentService documentService) {
@@ -38,17 +35,16 @@ public class DocumentControllerImpl implements DocumentController {
 
     @GetMapping("/")
     public String getDocuments(
-            @RequestParam(name = REQUEST_PARAMETER_CURRENT_PAGE, defaultValue = DEFAULT_CURRENT_PAGE) Integer currentPage,
-            @RequestParam(name = REQUEST_PARAMETER_DOCUMENTS_PER_PAGE, defaultValue = DEFAULT_DOCUMENTS_PER_PAGE) Integer documentsPerPage,
+            @RequestParam(name = REQUEST_PARAMETER_CURRENT_PAGE, defaultValue = "1") Integer currentPage,
+            @RequestParam(name = REQUEST_PARAMETER_DOCUMENTS_PER_PAGE, defaultValue = "5") Integer documentsPerPage,
             Model model
     ) {
         List<DocumentDTO> documentDTOs = documentService.getPackDocuments(currentPage, documentsPerPage);
-
-        model.addAttribute(REQUEST_PARAMETER_DOCUMENTS, documentDTOs);
+        model.addAttribute("documents", documentDTOs);
 
         Integer amountDocuments = documentService.getAmountDocuments();
         Integer amountPages = amountDocuments / documentsPerPage;
-        if (amountPages % documentsPerPage > 0) {
+        if (amountDocuments % documentsPerPage > 0) {
             amountPages++;
         }
         if (amountPages == 0) {
@@ -70,47 +66,55 @@ public class DocumentControllerImpl implements DocumentController {
         return "view_document";
     }
 
-    @GetMapping("/document/add")
+    @GetMapping(URL_ADD_DOCUMENT)
     public String addDocument(
             @ModelAttribute(name = "document") AddDocumentDTO addDocumentDTO
     ) {
-        return "add_document";
+        return VIEW_PAGE_ADD_DOCUMENT;
     }
 
-    @PostMapping("/document/add")
+    @PostMapping(URL_ADD_DOCUMENT)
     public String addDocument(
             @Valid @ModelAttribute(name = "document") AddDocumentDTO addDocumentDTO,
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            return "add_document";
+            return VIEW_PAGE_ADD_DOCUMENT;
         }
         documentService.addDocument(addDocumentDTO);
         return "redirect:/";
     }
 
-    @PostMapping("/document/remove")
-    public String removeDocument() {
-        return "remove_document";
-    }
-//
-//    @GetMapping("/document/update")
-//    public String updateDocument(
-//            @RequestParam(name = "id") Long id,
-//            @ModelAttribute(name = "document") Document document,
-//            BindingResult bindingResult
-//    ) {
-//        return "redirect:/";
-//    }
-
     @PostMapping("/document/edit")
-    public String updateDocument(@RequestParam(name = "id") Long id,
+    public String updateDocument(
+            @RequestParam(name = "id") Long id,
             @RequestParam(name = "update", defaultValue = "") String isUpdate,
+            @Valid @ModelAttribute(name = "document") DocumentDTO updatedDocument,
+            BindingResult bindingResult,
             Model model
     ) {
-        logger.info(isUpdate);
-        DocumentDTO documentDTO = documentService.getDocumentById(id);
-        model.addAttribute("document", documentDTO);
-        return "update_document";
+        if (isUpdate.isBlank()) {
+            DocumentDTO documentDTO = documentService.getDocumentById(id);
+            model.addAttribute("document", documentDTO);
+        } else {
+            if (bindingResult.hasErrors()) {
+                return VIEW_PAGE_UPDATE_DOCUMENT;
+            }
+            boolean isDocumentUpdate = documentService.updateDocument(updatedDocument);
+            model.addAttribute("isUpdated", isDocumentUpdate);
+        }
+        return VIEW_PAGE_UPDATE_DOCUMENT;
     }
+
+    @PostMapping("/document/remove")
+    public String removeDocument(
+            @RequestParam(name = "id") Long id,
+            Model model
+    ) {
+        DocumentDTO documentDTO = documentService.getDocumentById(id);
+        boolean isDocumentRemoved = documentService.removeDocument(documentDTO);
+        model.addAttribute("isRemoved", isDocumentRemoved);
+        return "redirect:/";
+    }
+
 }

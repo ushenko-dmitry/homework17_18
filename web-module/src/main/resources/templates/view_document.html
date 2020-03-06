@@ -7,16 +7,17 @@
     </head>
     <body>
         <h1 class="header">View document</h1>
-        <div th:object="${document}">
+        <div class="view_document" th:object="${document}">
             <h1 th:text="*{name}">Name Document</h1>
             <p th:text="*{description}">Document Description</p>
         </div>
-        <div>
-            <form method="POST" action="/document/edit">
+
+        <div class="view_document_btns">
+            <form method="POST" th:action="@{/document/edit}">
                 <input type="hidden" name="id" th:value="${document.id}"/>
                 <input type="submit" value="Edit"/>
             </form>
-            <form method="POST" action="/document/delete">
+            <form method="POST" th:action="@{/document/remove}">
                 <input type="hidden" name="id" th:value="${document.id}"/>
                 <input type="submit" value="Delete"/>
             </form>

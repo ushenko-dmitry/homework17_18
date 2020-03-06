@@ -11,7 +11,17 @@ a{
 table.documents{
     margin: auto;
 }
+table.documents tr{
+    border: 1px solid black;
+}
+table.documents tr.dark{
+    background: #e0e0e0;
+}
+table.documents tr.light{
+    background: #f0f0f0;
+}
 table.documents td{
+    margin: 5px;
     padding: 5px;
     text-align: center;
     border: 1px solid black;
@@ -67,4 +77,43 @@ input, select{
     background: white;
     padding: 5px;
     font-size: 14px;
+}
+
+.view_document{
+    outline: 1px solid black;
+    width: 300px;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+.view_document h1{
+    outline: 1px solid black;
+    text-align: center;
+    margin: 0;
+    padding: 5px;
+}
+
+.view_document p{
+    outline: 1px solid black;
+    position: relative;
+    margin: 5px 0 0 0;
+    text-align: justify;
+    font-size: 18px;
+    padding: 5px;
+}
+
+.view_document_btns{
+    outline: 1px solid black;
+    width: 160px;
+    height: 40px;
+    margin: 30px auto;
+}
+.view_document_btns form{
+    float: left;
+    margin: 5px;
+}
+.view_document_btns a{
+    top: 5px;
+    float: left;
+    margin: 5px;
 }

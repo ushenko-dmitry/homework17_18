@@ -7,7 +7,7 @@
     </head>
     <body>
         <h1>Create new document</h1>
-        <form method="POST" action="/document/add" th:object="${document}">
+        <form method="POST" th:action="@{/document/add}" th:object="${document}">
             <span>Name: </span>
             <br/>
             <input type="text" name="name" placeholder="Name" required th:field="*{name}" />

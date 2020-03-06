@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,8 @@ public class DocumentServiceImpl implements DocumentService {
         try (Connection connection = connectionPoolRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
+                String uniqueNumber = UUID.randomUUID().toString();
+                addDocumentDTO.setUniqueNumber(uniqueNumber);
                 Document document = documentConvertService.getObjectFromAddDTO(addDocumentDTO);
                 document = documentRepository.addEntity(connection, document);
                 DocumentDTO documentDTO = documentConvertService.getDTOFromObject(document);

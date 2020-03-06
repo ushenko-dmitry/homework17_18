@@ -8,8 +8,10 @@ public class DocumentDTO {
     private Long id;
     private String uniqueNumber;
     @NotNull
+    @Size(min = 1, message = "is required")
     private String name;
-    @Size (max = 100)
+    @NotNull
+    @Size(max = 100, message = "is required")
     private String description;
 
     public Long getId() {

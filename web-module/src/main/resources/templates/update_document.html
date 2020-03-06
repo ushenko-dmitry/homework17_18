@@ -7,7 +7,17 @@
     </head>
     <body>
         <h1>Edit document</h1>
-        <form method="POST" action="/document/edit" th:object="${document}">
+        <th:block th:unless="${isUpdated} == null">
+            <th:block th:if="${isUpdated}">
+                <span>Document was updated</span>
+            </th:block>
+            <th:block th:unless="${isUpdated}">
+                <span>Document was not updated</span>
+            </th:block>
+        </th:block>
+        <br/>
+        <br/>
+        <form method="POST" th:action="@{/document/edit}" th:object="${document}">
             <span>Name: </span>
             <br/>
             <input type="text" name="name" placeholder="Name" required th:field="*{name}" th:value="*{name}" />
@@ -26,9 +36,13 @@
             </th:block>
             <br/>
             <br/>
-            <input type="hidden" name="id" value="${id}"/>
+            <input type="hidden" name="id" th:value="*{id}"/>
             <input type="submit" name="update" value="Save"/>
-            <a th:href="@{/}">Back</a>
+        </form>
+        <br/>
+        <form method="POST" th:action="@{/document}">
+            <input type="hidden" name="id" th:value="${document.id}"/>
+            <input type="submit" value="Back"/>
         </form>
     </body>
 </html>

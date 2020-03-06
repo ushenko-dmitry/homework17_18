@@ -7,7 +7,7 @@ public class AddDocumentDTO {
 
     private String uniqueNumber;
     @NotNull
-    @Size(min=1)
+    @Size(min = 1)
     private String name;
     @NotNull
     @Size(max = 100, message = "is required")

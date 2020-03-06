@@ -6,7 +6,7 @@
         <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     </head>
     <body>
-        
+
         <table class="documents">
             <caption>All documents</caption>
             <thead>
@@ -19,30 +19,32 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="document,stat : ${documents}">
-                    <th:block th:with="element=${stat.count + (currentPage - 1) * documentsPerPage}">
-                        <td th:text="${element}">0</td>
-                    </th:block>
-                    <td th:text="${document.name}">Document Name</td>
-                    <td>
-                        <form method="POST" action="/document">
-                            <input type="hidden" name="id" th:value="${document.id}"/>
-                            <input type="submit" value="Open"/>
-                        </form>
-                    </td>
-                    <td>
-                        <form method="POST" action="/document/edit">
-                            <input type="hidden" name="id" th:value="${document.id}"/>
-                            <input type="submit" value="Edit"/>
-                        </form>
-                    </td>
-                    <td>
-                        <form method="POST" action="/document/delete">
-                            <input type="hidden" name="id" th:value="${document.id}"/>
-                            <input type="submit" value="Delete"/>
-                        </form>
-                    </td>
-                </tr>
+                <th:block  th:each="document,stat : ${documents}">
+                    <tr th:classappend="${stat.even} ? dark : light">
+                        <th:block th:with="element=${stat.count + (currentPage - 1) * documentsPerPage}">
+                            <td th:text="${element}">0</td>
+                        </th:block>
+                        <td th:text="${document.name}">Document Name</td>
+                        <td>
+                            <form method="POST" th:action="@{/document}">
+                                <input type="hidden" name="id" th:value="${document.id}"/>
+                                <input type="submit" value="Open"/>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" th:action="@{/document/edit}">
+                                <input type="hidden" name="id" th:value="${document.id}"/>
+                                <input type="submit" value="Edit"/>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" th:action="@{/document/remove}">
+                                <input type="hidden" name="id" th:value="${document.id}"/>
+                                <input type="submit" value="Delete"/>
+                            </form>
+                        </td>
+                    </tr>
+                </th:block>
                 <tr>
                     <td colspan="5">
                         <form method="GET" th:action="@{/document/add}">
@@ -52,7 +54,7 @@
                 </tr>
             </tbody>
         </table>
-        
+
         <div class="pageList">
             <div class="pages">
                 <p>Pages: <span th:text="${currentPage} + '/' + ${amountPages}"></span></p>
