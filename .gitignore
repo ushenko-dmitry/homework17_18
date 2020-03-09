@@ -1,0 +1,12 @@
+/repository-module/target/
+/service-module/target/
+/web-module/target/
+
+**/logs
+
+web-module/HELP.md
+web-module/.mvn/wrapper/maven-wrapper.jar
+web-module/.mvn/wrapper/maven-wrapper.properties
+web-module/.mvn/wrapper/MavenWrapperDownloader.java
+web-module/mvnw
+web-module/mvnw.cmd
