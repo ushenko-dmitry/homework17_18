@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Documents</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    </head>
+    <body>
+
+        <table class="documents">
+            <caption>All documents</caption>
+            <thead>
+                <tr>
+                    <td>№</td>
+                    <td>Name</td>
+                    <td>Open</td>
+                    <td>Edit</td>
+                    <td>Delete</td>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block  th:each="document,stat : ${documents}">
+                    <tr th:classappend="${stat.even} ? dark : light">
+                        <th:block th:with="element=${stat.count + (currentPage - 1) * documentsPerPage}">
+                            <td th:text="${element}">0</td>
+                        </th:block>
+                        <td th:text="${document.name}">Document Name</td>
+                        <td>
+                            <form method="POST" th:action="@{/document}">
+                                <input type="hidden" name="id" th:value="${document.id}"/>
+                                <input type="submit" value="Open"/>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" th:action="@{/document/edit}">
+                                <input type="hidden" name="id" th:value="${document.id}"/>
+                                <input type="submit" value="Edit"/>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" th:action="@{/document/remove}">
+                                <input type="hidden" name="id" th:value="${document.id}"/>
+                                <input type="submit" value="Delete"/>
+                            </form>
+                        </td>
+                    </tr>
+                </th:block>
+                <tr>
+                    <td colspan="5">
+                        <form method="GET" th:action="@{/document/add}">
+                            <input type="submit" value="add new document"/>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pageList">
+            <div class="pages">
+                <p>Pages: <span th:text="${currentPage} + '/' + ${amountPages}"></span></p>
+            </div>
+            <ul>
+                <th:block th:unless="${currentPage == 1}">
+                    <li><a th:href="@{/(currentPage=${currentPage - 1}, documentsPerPage=${documentsPerPage})}">Back</a></li>
+                </th:block>
+                <li><a th:href="@{/(currentPage=${currentPage}, documentsPerPage=${documentsPerPage})}" th:text="${currentPage}">page</a></li>
+                <th:block th:unless="${currentPage == amountPages}">
+                    <li><a th:href="@{/(currentPage=${currentPage + 1}, documentsPerPage=${documentsPerPage})}">Next</a></li>
+                </th:block>
+            </ul>
+            <div class="amount_per_page">
+                <form method="GET" th:action="@{/}">
+                    <span>documents per page: </span>
+                    <input type="hidden" name="currentPage" value="1"/>
+                    <select name="documentsPerPage">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                    <input type="submit" value="Apply"/>
+                </form>
+            </div>
+        </div>
+
+
+    </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Edit document</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    </head>
+    <body>
+        <h1>Edit document</h1>
+        <th:block th:unless="${isUpdated} == null">
+            <th:block th:if="${isUpdated}">
+                <span>Document was updated</span>
+            </th:block>
+            <th:block th:unless="${isUpdated}">
+                <span>Document was not updated</span>
+            </th:block>
+        </th:block>
+        <br/>
+        <br/>
+        <form method="POST" th:action="@{/document/edit}" th:object="${document}">
+            <span>Name: </span>
+            <br/>
+            <input type="text" name="name" placeholder="Name" required th:field="*{name}" th:value="*{name}" />
+            <th:block th:if="${#fields.hasErrors('name')}">
+                <br/>
+                <span th:errors="*{name}">name error</span>
+            </th:block>
+            <br/>
+            <br/>
+            <span>Description: </span>
+            <br/>
+            <textarea name="description" placeholder="Description" maxlength="100" th:field="*{description}" th:value="*{description}" ></textarea>
+            <th:block th:if="${#fields.hasErrors('description')}">
+                <br/>
+                <span th:errors="*{description}">description error</span>
+            </th:block>
+            <br/>
+            <br/>
+            <input type="hidden" name="id" th:value="*{id}"/>
+            <input type="submit" name="update" value="Save"/>
+        </form>
+        <br/>
+        <form method="POST" th:action="@{/document}">
+            <input type="hidden" name="id" th:value="${document.id}"/>
+            <input type="submit" value="Back"/>
+        </form>
+    </body>
+</html>
